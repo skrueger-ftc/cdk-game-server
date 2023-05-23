@@ -15,6 +15,8 @@ bot_token = secrets["BotToken"]
 
 command_name = os.environ.get("COMMAND_NAME")
 
+service_ids = os.environ.get("SERVICE_IDS")
+
 def on_create(event):
     url = f"https://discord.com/api/v10/applications/{app_id}/guilds/{guild_id}/commands"
 
@@ -27,13 +29,15 @@ def on_create(event):
         "options": [
             {
                 "name": "status",
-                "description": "Check the status of the server",
+                "description": "Check the status of a server",
                 "type": 1,
+                "choices": [],
             },
             {
                 "name": "start",
-                "description": "Start the server, if it isn't running",
+                "description": "Start a server, if it isn't running",
                 "type": 1,
+                "choices": [],
             },
             {
                 "name": "stop",
@@ -42,6 +46,17 @@ def on_create(event):
             },
         ],
     }
+
+    # Add each Game Server
+    ids = service_ids.split(",")
+    for (id, index) in enumerate(ids):
+        pair = {
+            "name": id,
+            "value": index,
+        }
+
+        blob["options"][0]["choices"].append(pair)
+        blob["options"][1]["choices"].append(pair)
 
     # For authorization, you can use your bot token
     headers = {"Authorization": f"Bot {bot_token}"}

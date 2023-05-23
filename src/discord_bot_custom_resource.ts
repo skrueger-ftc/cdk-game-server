@@ -10,6 +10,7 @@ import { Construct } from 'constructs';
 export interface DiscordBotCustomResourceProps {
   secret: ISecret;
   commandName: string;
+  serviceNames: string[];
 }
 
 export class DiscordBotCustomResource extends Construct {
@@ -23,6 +24,7 @@ export class DiscordBotCustomResource extends Construct {
     const version = hash.update(body).digest('hex');
 
     const commandName = props.commandName;
+    const serviceNames = props.serviceNames;
 
     const secret = props.secret;
 
@@ -43,6 +45,7 @@ export class DiscordBotCustomResource extends Construct {
       environment: {
         COMMAND_NAME: commandName,
         SECRET_NAME: secret.secretName,
+        SERVICE_IDS: serviceNames.toString(),
       },
     });
 

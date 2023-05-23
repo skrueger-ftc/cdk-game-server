@@ -5,8 +5,8 @@ import hashlib
 from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
 
-cluster = os.environ.get("CLUSTER_ARN")
-service = os.environ.get("SERVICE_ARN")
+clusters = os.environ.get("CLUSTER_ARN").split(",")
+services = os.environ.get("SERVICE_ARN").split(",")
 secrets_manager = boto3.client("secretsmanager")
 ecs = boto3.client("ecs")
 sfn = boto3.client("stepfunctions")
@@ -55,6 +55,7 @@ def post(event):
 
     elif rtype == 2:
         sub_command = request["data"]["options"][0]["name"]
+        index = request["data"]["options"][0]["value"]
 
         h = hashlib.sha256()
         h.update(bytes(interaction_token, "utf-8"))
@@ -68,6 +69,9 @@ def post(event):
                 {
                     "InteractionToken": interaction_token,
                     "SubCommand": sub_command,
+                    "Clusters": clusters,
+                    "Services": services,
+                    "Index": index,
                 }
             ),
         )

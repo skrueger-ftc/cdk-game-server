@@ -1,16 +1,16 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { StateMachine } from '@matthewbonig/state-machine';
-import { BaseService } from 'aws-cdk-lib/aws-ecs';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
+import { GameServer } from '.';
 
 //new StateMachine(scope: Construct, id: string, props: StateMachineProps)
 
 export interface DiscordStateMachineProps {
-  service: BaseService;
+  gameServers: GameServer[];
   discordSecret: ISecret;
 }
 
@@ -43,28 +43,6 @@ export class DiscordStateMachine extends Construct {
     const sm = new StateMachine(this, 'DiscordStateMachine', {
       definition: JSON.parse(fs.readFileSync(path.join(__dirname, '../resources/discord-bot-asl.json'), 'utf8').toString()),
       overrides: {
-        DescribeServices: {
-          Parameters: {
-            Cluster: props.service.cluster.clusterArn,
-            Services: [
-              props.service.serviceArn,
-            ],
-          },
-        },
-        StartService: {
-          Parameters: {
-            Cluster: props.service.cluster.clusterArn,
-            Service: props.service.serviceArn,
-            DesiredCount: 1,
-          },
-        },
-        StopService: {
-          Parameters: {
-            Cluster: props.service.cluster.clusterArn,
-            Service: props.service.serviceArn,
-            DesiredCount: 0,
-          },
-        },
         SendDiscordResponse: {
           Parameters: {
             FunctionName: f.functionArn,
@@ -73,10 +51,12 @@ export class DiscordStateMachine extends Construct {
       },
     });
 
-    sm.addToRolePolicy(new PolicyStatement({
-      actions: ['ecs:DescribeServices', 'ecs:UpdateService'],
-      resources: [props.service.serviceArn],
-    }));
+    props.gameServers.forEach(function (gameServer) {
+      sm.addToRolePolicy(new PolicyStatement({
+        actions: ['ecs:DescribeServices', 'ecs:UpdateService'],
+        resources: [gameServer.service.serviceArn],
+      }));
+    });
 
     f.grantInvoke(sm.grantPrincipal);
 

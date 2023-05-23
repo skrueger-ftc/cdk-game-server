@@ -1,34 +1,50 @@
 import * as path from 'path';
 import { ApiGatewayToLambda } from '@aws-solutions-constructs/aws-apigateway-lambda';
 import { AuthorizationType } from 'aws-cdk-lib/aws-apigateway';
-import { BaseService } from 'aws-cdk-lib/aws-ecs';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
+import { GameServer } from '.';
 import { DiscordStateMachine } from './discord-state-machine';
 import { DiscordBotCustomResource } from './discord_bot_custom_resource';
 
-export interface DiscordBotOptions {
-  commandName: string;
-  secretName: string;
+export interface DiscordBotProps {
+  /**
+   * The game servers that the discord bot will manage
+   */
+  readonly gameServers: GameServer[];
+
+  /**
+   * The name of the slash command that will appear in Discord. For example: `/servers start [server-name]` or `/satifactory status [server-name]`
+   */
+  readonly commandName: string;
+
+  /**
+   * @see https://github.com/raykrueger/cdk-game-server#setting-up-discord}
+   */
+  readonly secretName: string;
 }
 
-export interface DiscordBotConstructProps {
-  service: BaseService;
-  botOptions: DiscordBotOptions;
-}
-
-export class DiscordBotConstruct extends Construct {
-  constructor(scope: Construct, id: string, props: DiscordBotConstructProps) {
+/**
+ * Runs a server-less Discord bot that manages Game Servers
+ */
+export class DiscordBot extends Construct {
+  constructor(scope: Construct, id: string, props: DiscordBotProps) {
     super(scope, id);
 
-    const secret = Secret.fromSecretNameV2(this, 'SecretLookup', props.botOptions.secretName);
+    const secret = Secret.fromSecretNameV2(this, 'SecretLookup', props.secretName);
+
+    const serviceNames = props.gameServers.map(server => server.service.serviceName);
 
     new DiscordBotCustomResource(this, 'DiscordBotSetup', {
-      commandName: props.botOptions.commandName,
+      commandName: props.commandName,
+      serviceNames,
       secret,
     });
+
+    const clusterArns = props.gameServers.map(server => server.cluster.clusterArn);
+    const serviceArns = props.gameServers.map(server => server.service.serviceArn);
 
     const f = new Function(this, 'DiscordBotFunction', {
       runtime: Runtime.PYTHON_3_9,
@@ -43,16 +59,17 @@ export class DiscordBotConstruct extends Construct {
       }),
       handler: 'discord.handler',
       environment: {
-        CLUSTER_ARN: props.service.cluster.clusterArn,
-        SERVICE_ARN: props.service.serviceArn,
+        CLUSTER_ARN: clusterArns.toString(),
+        SERVICE_ARN: serviceArns.toString(),
         SECRET_NAME: secret.secretName,
       },
-      initialPolicy: [
-        new PolicyStatement({
-          actions: ['ecs:DescribeServices', 'ecs:UpdateService'],
-          resources: [props.service.serviceArn],
-        }),
-      ],
+    });
+
+    props.gameServers.forEach(function (gameServer) {
+      f.addToRolePolicy(new PolicyStatement({
+        actions: ['ecs:DescribeServices', 'ecs:UpdateService'],
+        resources: [gameServer.service.serviceArn],
+      }));
     });
 
     secret.grantRead(f);
@@ -67,7 +84,7 @@ export class DiscordBotConstruct extends Construct {
     });
 
     const dsm = new DiscordStateMachine(this, 'DiscordBotStateMachine', {
-      service: props.service,
+      gameServers: props.gameServers,
       discordSecret: secret,
     });
 

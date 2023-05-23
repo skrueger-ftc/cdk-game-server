@@ -35,8 +35,8 @@
       "Type": "Task",
       "Next": "RunningCheck",
       "Parameters": {
-        "Cluster": "",
-        "Service": "",
+        "Cluster.$": "$.Clusters[$.Index]",
+        "Service.$": "$.Services[$.Index]",
         "DesiredCount": 1
       },
       "Resource": "arn:aws:states:::aws-sdk:ecs:updateService",
@@ -91,8 +91,8 @@
     "DescribeServices": {
       "Type": "Task",
       "Parameters": {
-        "Cluster": "",
-        "Services": []
+        "Cluster.$": "$.Clusters[$.Index]",
+        "Services": [ "$.Services[$.Index]" ]
       },
       "Resource": "arn:aws:states:::aws-sdk:ecs:describeServices",
       "Next": "Choice",

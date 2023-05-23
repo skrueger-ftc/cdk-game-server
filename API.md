@@ -342,6 +342,107 @@ The best thing you can do for troubleshooting your game is to enable [Logging](#
 
 ## Constructs <a name="Constructs" id="Constructs"></a>
 
+### DiscordBot <a name="DiscordBot" id="@raykrueger/cdk-game-server.DiscordBot"></a>
+
+Runs a server-less Discord bot that manages Game Servers.
+
+#### Initializers <a name="Initializers" id="@raykrueger/cdk-game-server.DiscordBot.Initializer"></a>
+
+```typescript
+import { DiscordBot } from '@raykrueger/cdk-game-server'
+
+new DiscordBot(scope: Construct, id: string, props: DiscordBotProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@raykrueger/cdk-game-server.DiscordBot.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@raykrueger/cdk-game-server.DiscordBot.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@raykrueger/cdk-game-server.DiscordBot.Initializer.parameter.props">props</a></code> | <code><a href="#@raykrueger/cdk-game-server.DiscordBotProps">DiscordBotProps</a></code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@raykrueger/cdk-game-server.DiscordBot.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@raykrueger/cdk-game-server.DiscordBot.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@raykrueger/cdk-game-server.DiscordBot.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@raykrueger/cdk-game-server.DiscordBotProps">DiscordBotProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@raykrueger/cdk-game-server.DiscordBot.toString">toString</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `toString` <a name="toString" id="@raykrueger/cdk-game-server.DiscordBot.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@raykrueger/cdk-game-server.DiscordBot.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@raykrueger/cdk-game-server.DiscordBot.isConstruct"></a>
+
+```typescript
+import { DiscordBot } from '@raykrueger/cdk-game-server'
+
+DiscordBot.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@raykrueger/cdk-game-server.DiscordBot.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@raykrueger/cdk-game-server.DiscordBot.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@raykrueger/cdk-game-server.DiscordBot.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+
 ### GameServer <a name="GameServer" id="@raykrueger/cdk-game-server.GameServer"></a>
 
 Builds a game server, running on ECS Fargate.
@@ -448,7 +549,6 @@ Any object.
 | <code><a href="#@raykrueger/cdk-game-server.GameServer.property.service">service</a></code> | <code>aws-cdk-lib.aws_ecs.IService</code> | *No description.* |
 | <code><a href="#@raykrueger/cdk-game-server.GameServer.property.additionalArgs">additionalArgs</a></code> | <code>string[]</code> | *No description.* |
 | <code><a href="#@raykrueger/cdk-game-server.GameServer.property.autoShutdownConfig">autoShutdownConfig</a></code> | <code><a href="#@raykrueger/cdk-game-server.AutoShutdownProps">AutoShutdownProps</a></code> | *No description.* |
-| <code><a href="#@raykrueger/cdk-game-server.GameServer.property.discord">discord</a></code> | <code><a href="#@raykrueger/cdk-game-server.DiscordCommandOptions">DiscordCommandOptions</a></code> | *No description.* |
 | <code><a href="#@raykrueger/cdk-game-server.GameServer.property.dnsConfig">dnsConfig</a></code> | <code><a href="#@raykrueger/cdk-game-server.DomainProps">DomainProps</a></code> | *No description.* |
 | <code><a href="#@raykrueger/cdk-game-server.GameServer.property.logging">logging</a></code> | <code>aws-cdk-lib.aws_ecs.LogDriver</code> | *No description.* |
 | <code><a href="#@raykrueger/cdk-game-server.GameServer.property.steamArgs">steamArgs</a></code> | <code>string</code> | *No description.* |
@@ -588,16 +688,6 @@ public readonly autoShutdownConfig: AutoShutdownProps;
 
 ---
 
-##### `discord`<sup>Optional</sup> <a name="discord" id="@raykrueger/cdk-game-server.GameServer.property.discord"></a>
-
-```typescript
-public readonly discord: DiscordCommandOptions;
-```
-
-- *Type:* <a href="#@raykrueger/cdk-game-server.DiscordCommandOptions">DiscordCommandOptions</a>
-
----
-
 ##### `dnsConfig`<sup>Optional</sup> <a name="dnsConfig" id="@raykrueger/cdk-game-server.GameServer.property.dnsConfig"></a>
 
 ```typescript
@@ -680,26 +770,27 @@ public readonly evaluationPeriods: number;
 
 ---
 
-### DiscordCommandOptions <a name="DiscordCommandOptions" id="@raykrueger/cdk-game-server.DiscordCommandOptions"></a>
+### DiscordBotProps <a name="DiscordBotProps" id="@raykrueger/cdk-game-server.DiscordBotProps"></a>
 
-#### Initializer <a name="Initializer" id="@raykrueger/cdk-game-server.DiscordCommandOptions.Initializer"></a>
+#### Initializer <a name="Initializer" id="@raykrueger/cdk-game-server.DiscordBotProps.Initializer"></a>
 
 ```typescript
-import { DiscordCommandOptions } from '@raykrueger/cdk-game-server'
+import { DiscordBotProps } from '@raykrueger/cdk-game-server'
 
-const discordCommandOptions: DiscordCommandOptions = { ... }
+const discordBotProps: DiscordBotProps = { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@raykrueger/cdk-game-server.DiscordCommandOptions.property.commandName">commandName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@raykrueger/cdk-game-server.DiscordCommandOptions.property.secretName">secretName</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@raykrueger/cdk-game-server.DiscordBotProps.property.commandName">commandName</a></code> | <code>string</code> | The name of the slash command that will appear in Discord. |
+| <code><a href="#@raykrueger/cdk-game-server.DiscordBotProps.property.gameServers">gameServers</a></code> | <code><a href="#@raykrueger/cdk-game-server.GameServer">GameServer</a>[]</code> | The game servers that the discord bot will manage. |
+| <code><a href="#@raykrueger/cdk-game-server.DiscordBotProps.property.secretName">secretName</a></code> | <code>string</code> | *No description.* |
 
 ---
 
-##### `commandName`<sup>Required</sup> <a name="commandName" id="@raykrueger/cdk-game-server.DiscordCommandOptions.property.commandName"></a>
+##### `commandName`<sup>Required</sup> <a name="commandName" id="@raykrueger/cdk-game-server.DiscordBotProps.property.commandName"></a>
 
 ```typescript
 public readonly commandName: string;
@@ -707,15 +798,33 @@ public readonly commandName: string;
 
 - *Type:* string
 
+The name of the slash command that will appear in Discord.
+
+For example: `/servers start [server-name]` or `/satifactory status [server-name]`
+
 ---
 
-##### `secretName`<sup>Required</sup> <a name="secretName" id="@raykrueger/cdk-game-server.DiscordCommandOptions.property.secretName"></a>
+##### `gameServers`<sup>Required</sup> <a name="gameServers" id="@raykrueger/cdk-game-server.DiscordBotProps.property.gameServers"></a>
+
+```typescript
+public readonly gameServers: GameServer[];
+```
+
+- *Type:* <a href="#@raykrueger/cdk-game-server.GameServer">GameServer</a>[]
+
+The game servers that the discord bot will manage.
+
+---
+
+##### `secretName`<sup>Required</sup> <a name="secretName" id="@raykrueger/cdk-game-server.DiscordBotProps.property.secretName"></a>
 
 ```typescript
 public readonly secretName: string;
 ```
 
 - *Type:* string
+
+> [https://github.com/raykrueger/cdk-game-server#setting-up-discord}](https://github.com/raykrueger/cdk-game-server#setting-up-discord})
 
 ---
 
@@ -831,7 +940,6 @@ const gameServerProps: GameServerProps = { ... }
 | <code><a href="#@raykrueger/cdk-game-server.GameServerProps.property.containerInsights">containerInsights</a></code> | <code>boolean</code> | Do we want to enable Cloudwatch Container Insights, and incur additional cost? |
 | <code><a href="#@raykrueger/cdk-game-server.GameServerProps.property.containerSecrets">containerSecrets</a></code> | <code>{[ key: string ]: aws-cdk-lib.aws_ecs.Secret}</code> | *No description.* |
 | <code><a href="#@raykrueger/cdk-game-server.GameServerProps.property.cpu">cpu</a></code> | <code>number</code> | vCpu amout to be granted to ECS Fargate task. |
-| <code><a href="#@raykrueger/cdk-game-server.GameServerProps.property.discord">discord</a></code> | <code><a href="#@raykrueger/cdk-game-server.DiscordCommandOptions">DiscordCommandOptions</a></code> | *No description.* |
 | <code><a href="#@raykrueger/cdk-game-server.GameServerProps.property.dnsConfig">dnsConfig</a></code> | <code><a href="#@raykrueger/cdk-game-server.DomainProps">DomainProps</a></code> | *No description.* |
 | <code><a href="#@raykrueger/cdk-game-server.GameServerProps.property.logging">logging</a></code> | <code>aws-cdk-lib.aws_ecs.LogDriver</code> | Logging driver to use. |
 | <code><a href="#@raykrueger/cdk-game-server.GameServerProps.property.memoryLimitMiB">memoryLimitMiB</a></code> | <code>number</code> | Memory limit in 1024 incrmements. |
@@ -936,16 +1044,6 @@ public readonly cpu: number;
 vCpu amout to be granted to ECS Fargate task.
 
 > [https://aws.amazon.com/fargate/pricing/](https://aws.amazon.com/fargate/pricing/)
-
----
-
-##### `discord`<sup>Optional</sup> <a name="discord" id="@raykrueger/cdk-game-server.GameServerProps.property.discord"></a>
-
-```typescript
-public readonly discord: DiscordCommandOptions;
-```
-
-- *Type:* <a href="#@raykrueger/cdk-game-server.DiscordCommandOptions">DiscordCommandOptions</a>
 
 ---
 

@@ -5,17 +5,13 @@ import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as efs from 'aws-cdk-lib/aws-efs';
 import { Construct } from 'constructs';
 import * as shutdown from './auto_shutdown';
-import { DiscordBotConstruct } from './discord';
 
 const DEFAULT_VCPU = 2048;
 const DEFAULT_MEMORY = 8192;
 
 export { AutoShutdownProps } from './auto_shutdown';
 
-export interface DiscordCommandOptions {
-  readonly commandName: string;
-  readonly secretName: string;
-}
+export { DiscordBot, DiscordBotProps } from './discord';
 
 export interface GamePort {
   readonly protocol: ecs.Protocol;
@@ -73,7 +69,6 @@ export interface GameServerProps {
 
   readonly dnsConfig?: DomainProps;
   readonly autoShutdownConfig?: shutdown.AutoShutdownProps;
-  readonly discord?: DiscordCommandOptions;
   readonly mountTarget: string;
   readonly gamePorts: GamePort[];
   readonly additionalArgs?: string[];
@@ -103,7 +98,6 @@ export class GameServer extends Construct {
   readonly logging?: ecs.LogDriver;
   readonly dnsConfig?: DomainProps;
   readonly autoShutdownConfig?: shutdown.AutoShutdownProps;
-  readonly discord?: DiscordCommandOptions;
   readonly mountTarget: string;
   readonly gamePorts: GamePort[];
   readonly additionalArgs?: string[];
@@ -143,7 +137,6 @@ export class GameServer extends Construct {
     this.logging = props.logging;
     this.dnsConfig = props.dnsConfig;
     this.autoShutdownConfig = props.autoShutdownConfig;
-    this.discord = props.discord;
     this.mountTarget = props.mountTarget;
     this.gamePorts = props.gamePorts;
     this.additionalArgs = props.additionalArgs;
@@ -250,11 +243,5 @@ export class GameServer extends Construct {
 
     new shutdown.AutoShutdown(this, 'AutoShutdown', this.autoShutdownConfig).addService(service);
 
-    if (this.discord) {
-      new DiscordBotConstruct(this, 'DiscordBot', {
-        service,
-        botOptions: this.discord,
-      });
-    }
   }
 }
