@@ -218,6 +218,7 @@ export class GameServer extends Construct {
          */
     const service = new ecs.FargateService(this, 'Service', {
       cluster: cluster,
+      serviceName: id,
       taskDefinition: taskDef,
       propagateTags: ecs.PropagatedTagSource.TASK_DEFINITION,
       desiredCount: 1,
