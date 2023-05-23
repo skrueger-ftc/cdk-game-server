@@ -15,20 +15,12 @@ secret_name = os.environ.get("SECRET_NAME")
 secrets = secrets_manager.get_secret_value(SecretId=secret_name)["SecretString"]
 secrets = json.loads(secrets)
 
-
 def go_away():
     return {
         "statusCode": 400,
         "headers": {"Content-Type": "text/plain"},
         "body": "wut?",
     }
-
-
-def is_server_up():
-    response = ecs.describe_services(cluster=cluster, services=[service])
-    count = response["services"][0]["runningCount"]
-    return count > 0
-
 
 def post(event):
     request = json.loads(event["body"])
