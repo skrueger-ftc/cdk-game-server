@@ -77,8 +77,8 @@
       "Type": "Task",
       "Next": "DescribeServices",
       "Parameters": {
-        "Cluster": "",
-        "Service": "",
+        "Cluster.$": "$.Clusters[$.Index]",
+        "Service.$": "$.Services[$.Index]",
         "DesiredCount": 0
       },
       "Resource": "arn:aws:states:::aws-sdk:ecs:updateService",

@@ -31,32 +31,34 @@ def on_create(event):
                 "name": "status",
                 "description": "Check the status of a server",
                 "type": 1,
-                "choices": [],
+                "choices": []
             },
             {
                 "name": "start",
                 "description": "Start a server, if it isn't running",
                 "type": 1,
-                "choices": [],
+                "choices": []
             },
             {
                 "name": "stop",
-                "description": "Stop the server, if it is running",
+                "description": "Stop a server, if it is running",
                 "type": 1,
-            },
+                "choices": []
+            }
         ],
     }
 
     # Add each Game Server
     ids = service_ids.split(",")
-    for (id, index) in enumerate(ids):
+    for index, service_id in enumerate(ids):
         pair = {
-            "name": id,
-            "value": index,
+            "name": service_id,
+            "value": index
         }
 
-        blob["options"][0]["choices"].append(pair)
-        blob["options"][1]["choices"].append(pair)
+        # Add to each command
+        for option in blob["options"]:
+            option["choices"].append(pair)
 
     # For authorization, you can use your bot token
     headers = {"Authorization": f"Bot {bot_token}"}
